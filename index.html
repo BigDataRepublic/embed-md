@@ -14,7 +14,7 @@
 Zepto(function($){
     $('')
   $('#markdownInput').on('keyup', function updateUrl(){
-        $('#url').text("https://ci8tq698d3.execute-api.eu-west-1.amazonaws.com/default/oembed?url=" + btoa($('#markdownInput').val()).replace("/", "_").replace("+", "-"))
+        $('#url').text("https://ci8tq698d3.execute-api.eu-west-1.amazonaws.com/default/oembed?url=https://ci8tq698d3.execute-api.eu-west-1.amazonaws.com/default/oembed/" + btoa($('#markdownInput').val()).replace("/", "_").replace("+", "-"))
   });
 })
   </script>
