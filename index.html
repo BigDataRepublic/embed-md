@@ -3,18 +3,18 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <title>Markdown for Medium embeddings</title>
+  <meta name="description" content="Markdown for Medium embeddings">
+  <meta name="author" content="BDR hobby group">
 
-  <title>Welcome</title>
-  <meta name="description" content="The HTML5 Herald">
-  <meta name="author" content="SitePoint">
-
-  <link rel="stylesheet" href="css/styles.css?v=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.5.1/css/foundation.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/zepto/1.2.0/zepto.min.js"></script>
   <script>
       // execute callback when the page is ready:
 Zepto(function($){
-  $('#markdownInput').on('change', function updateUrl(){
-        $('#url').text("/" + btoa($('#markdownInput').val()).replace("/", "_").replace("+", "-"))
+    $('')
+  $('#markdownInput').on('keyup', function updateUrl(){
+        $('#url').text("https://ci8tq698d3.execute-api.eu-west-1.amazonaws.com/default/oembed?url=" + btoa($('#markdownInput').val()).replace("/", "_").replace("+", "-"))
   });
 })
   </script>
@@ -31,7 +31,7 @@ First Header  | Second Header
 Content Cell  | Content Cell
 Content Cell  | Content Cell
     </textarea>
-
+    <input type="button" value="Copy" id="copyButton">
     <div id="url"></div>
 
 
