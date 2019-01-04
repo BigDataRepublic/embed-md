@@ -6,11 +6,11 @@ app = Flask(__name__)
 
 @app.route("/<markdown>")
 def render(markdown):
-    return lfunction.render({
+    return lfunction.lambda_handler({
         'pathParameters': {
             'markdown': markdown
         }
-    }, None)['message']
+    }, None)['body']
 
 
 if __name__ == "__main__":

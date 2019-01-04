@@ -3,11 +3,22 @@ import base64
 import markdown
 import markdown.extensions.extra
 
-def render(evt, context):
-    markdownSource = base64.urlsafe_b64decode(evt['pathParameters']['markdown']).decode("utf-8")
+def lambda_handler(evt, context):
+    markdownSource = ''
+    try:
+        markdownSource = base64.urlsafe_b64decode(evt['pathParameters']['markdown']).decode("utf-8")
+    except Exception as e:
+        pass
+    if len(markdownSource) == 0:
+        return lambda_editor()
     markdownHtml = markdown.markdown(markdownSource, extensions=['extra'])
     return {
-        'message': '''<!doctype html>
+        'statusCode': 200,
+        'headers': {
+            "content-type": "text/html",
+            "Access-Control-Allow-Origin": "*"
+        },
+        'body': '''<!doctype html>
 
         <html lang="en">
         <head>
@@ -16,7 +27,13 @@ def render(evt, context):
         </head><body>''' + markdownHtml + '''</body></html>'''
     }
 
-try:
-    export.handler = render
-except Exception as e:
-    pass
+def lambda_editor():
+    with open('index.html') as indexFile:
+        return {
+            'statusCode': 200,
+            'headers': {
+                "content-type": "text/html",
+                "Access-Control-Allow-Origin": "*"
+            },
+            'body': indexFile.read()
+        }
