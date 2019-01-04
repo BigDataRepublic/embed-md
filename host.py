@@ -4,6 +4,10 @@ import lfunction
 
 app = Flask(__name__)
 
+@app.route("/")
+def index():
+    return render('')
+
 @app.route("/<markdown>")
 def render(markdown):
     return lfunction.lambda_handler({

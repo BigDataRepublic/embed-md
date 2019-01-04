@@ -9,9 +9,12 @@ def lambda_handler(evt, context):
         markdownSource = base64.urlsafe_b64decode(evt['pathParameters']['markdown']).decode("utf-8")
     except Exception as e:
         pass
+
     if len(markdownSource) == 0:
         return lambda_editor()
+
     markdownHtml = markdown.markdown(markdownSource, extensions=['extra'])
+
     return {
         'statusCode': 200,
         'headers': {
@@ -32,8 +35,7 @@ def lambda_editor():
         return {
             'statusCode': 200,
             'headers': {
-                "content-type": "text/html",
-                "Access-Control-Allow-Origin": "*"
+                "content-type": "text/html"
             },
             'body': indexFile.read()
         }
