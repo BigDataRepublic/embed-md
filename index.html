@@ -7,33 +7,48 @@
   <meta name="description" content="Markdown for Medium embeddings">
   <meta name="author" content="BDR hobby group">
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.5.1/css/foundation.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/pure-min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/zepto/1.2.0/zepto.min.js"></script>
   <script>
       // execute callback when the page is ready:
 Zepto(function($){
     $('')
   $('#markdownInput').on('keyup', function updateUrl(){
-        $('#url').text("https://ci8tq698d3.execute-api.eu-west-1.amazonaws.com/default/oembed?url=https://ci8tq698d3.execute-api.eu-west-1.amazonaws.com/default/oembed/" + btoa($('#markdownInput').val()).replace("/", "_").replace("+", "-"))
+        $('#url').text("https://md.bigdatarepublic.nl/" + btoa($('#markdownInput').val()).replace("/", "_").replace("+", "-"))
   });
 })
   </script>
 </head>
 
 <body>
+
+
+    <div class="splash-container">
+        <div class="splash">
+            <h1 class="splash-head">MARKDOWN IN MEDIUM YEAH</h1>
+            <p class="splash-subhead">
+                Finally it's here and it's great....
+            </p>
+        </div>
+    </div>
+
+
+    <div class="content-wrapper">
+        <div class="content">
     <textarea id="markdownInput" name="markdown" rows="8" cols="80">
 # Yeah markdownHtml
 
-test stylesheet
+Type to generate url
 
 First Header  | Second Header
 ------------- | -------------
 Content Cell  | Content Cell
 Content Cell  | Content Cell
     </textarea>
-    <input type="button" value="Copy" id="copyButton">
-    <div id="url"></div>
-
+    <!-- <input class="pure-button pure-button-primary" type="button" value="Copy" id="copyButton"> -->
+    <div id="url" style="font-family: monospace;"></div>
+</div>
+</div>
 
 </body>
 </html>

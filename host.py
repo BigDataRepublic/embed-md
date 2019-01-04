@@ -8,14 +8,16 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-    return lfunction.lambda_editor({}, None)['body']
+    return lfunction.lambda_handler({'path': '/'}, None)['body']
+
+@app.route("/<markdown>")
+def html(markdown):
+    return lfunction.lambda_handler({'path': '/' + markdown, 'pathParameters': {'markdown': markdown}}, None)['body']
 
 @app.route("/oembed")
 def render():
     return json.dumps(lfunction.lambda_handler({
-        # 'pathParameters': {
-        #     'markdown': markdown
-        # },
+        'path': '/oembed',
         'queryStringParameters': request.args
     }, None)['body'])
 

@@ -22,13 +22,13 @@ def lambda_handler(evt, context):
 def render_markdown(inputValue):
     markdownSource = base64.urlsafe_b64decode(inputValue).decode("utf-8")
     markdownHtml = markdown.markdown(markdownSource, extensions=['extra'])
-
+    markdownHtml = markdownHtml.replace("<table>", '<table class="pure-table">')
     return '''<!doctype html>
 
         <html lang="en">
         <head>
           <meta charset="utf-8">
-          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.5.1/css/foundation.min.css">
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/pure-min.css">
         </head><body>''' + markdownHtml + '''</body></html>'''
 
 def render_html(evt, context):
