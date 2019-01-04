@@ -6,8 +6,20 @@ from urllib.parse import unquote
 
 import json
 
+def lambda_handler(evt, context):
+    path = evt['path']
+    if path.startswith("/oembed"):
+        return render_oembed(evt, context)
+    elif path == '/':
+        return render_editor(evt, context)
+    else:
+        return render_html(evt, context)
+    return {
+        'statusCode': 400,
+        'body': 'fuuuuuuuuuuuuu'
+    }
+
 def render_markdown(inputValue):
-    print(inputValue)
     markdownSource = base64.urlsafe_b64decode(inputValue).decode("utf-8")
     markdownHtml = markdown.markdown(markdownSource, extensions=['extra'])
 
@@ -19,7 +31,7 @@ def render_markdown(inputValue):
           <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.5.1/css/foundation.min.css">
         </head><body>''' + markdownHtml + '''</body></html>'''
 
-def lambda_render(evt, context):
+def render_html(evt, context):
     return {
         'statusCode': 200,
         'headers': {
@@ -29,8 +41,14 @@ def lambda_render(evt, context):
     }
 
 
-def lambda_handler(evt, context):
+def render_oembed(evt, context):
     markdownInput = unquote(evt['queryStringParameters']['url']).split("/")[-1]
+    format = evt['queryStringParameters'].get('format', '')
+    if format == 'xml':
+        return {
+            'statusCode': 501,
+            'body': 'Ehm... No'
+        }
     return  {
         'statusCode': 200,
         'headers': {
@@ -48,7 +66,7 @@ def lambda_handler(evt, context):
         })
     }
 
-def lambda_editor(evt, context):
+def render_editor(evt, context):
     with open('index.html') as indexFile:
         return {
             'statusCode': 200,
