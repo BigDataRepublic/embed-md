@@ -1,0 +1,39 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Welcome</title>
+  <meta name="description" content="The HTML5 Herald">
+  <meta name="author" content="SitePoint">
+
+  <link rel="stylesheet" href="css/styles.css?v=1.0">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/zepto/1.2.0/zepto.min.js"></script>
+  <script>
+      // execute callback when the page is ready:
+Zepto(function($){
+  $('#markdownInput').on('change', function updateUrl(){
+        $('#url').text("/" + btoa($('#markdownInput').val()).replace("/", "_").replace("+", "-"))
+  });
+})
+  </script>
+</head>
+
+<body>
+    <textarea id="markdownInput" name="markdown" rows="8" cols="80">
+# Yeah markdownHtml
+
+test stylesheet
+
+First Header  | Second Header
+------------- | -------------
+Content Cell  | Content Cell
+Content Cell  | Content Cell
+    </textarea>
+
+    <div id="url"></div>
+
+
+</body>
+</html>
