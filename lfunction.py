@@ -1,10 +1,10 @@
-
 import base64
 import markdown
 import markdown.extensions.extra
 from urllib.parse import unquote
 
 import json
+
 
 def lambda_handler(evt, context):
     path = evt['path']
@@ -19,17 +19,28 @@ def lambda_handler(evt, context):
         'body': 'fuuuuuuuuuuuuu'
     }
 
-def render_markdown(inputValue):
+
+def render_markdown(inputValue, max_height, max_width):
+    height = 600
+    width = 600
+
+    if max_height is not None and max_height < height:
+        height = max_height
+    if max_width is not None and max_width < width:
+        width = max_width
+
     markdownSource = base64.urlsafe_b64decode(inputValue).decode("utf-8")
     markdownHtml = markdown.markdown(markdownSource, extensions=['extra'])
-    markdownHtml = markdownHtml.replace("<table>", '<table class="pure-table">')
+    markdownHtml = markdownHtml.replace("<table>", '<table class="pure-table" height=' + str(height) + ' width=' + str(width) + '>')
     return '''<!doctype html>
 
         <html lang="en">
         <head>
           <meta charset="utf-8">
           <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/pure-min.css">
+          <link rel="alternate" type="application/json+oembed" href="https://md.bigdatarepublic.nl/oembed?url=https%3A%2F%2Fmd.bigdatarepublic.nl%2F''' + inputValue + '''&format=json" title="oEmbed" />
         </head><body>''' + markdownHtml + '''</body></html>'''
+
 
 def render_html(evt, context):
     return {
@@ -37,19 +48,22 @@ def render_html(evt, context):
         'headers': {
             "Content-Type": "text/html"
         },
-        'body': render_markdown(evt['pathParameters']['markdown'])
+        'body': render_markdown(evt['pathParameters']['markdown'], None, None)
     }
 
 
 def render_oembed(evt, context):
     markdownInput = unquote(evt['queryStringParameters']['url']).split("/")[-1]
-    format = evt['queryStringParameters'].get('format', '')
-    if format == 'xml':
+    formatting = evt['queryStringParameters'].get('format', '')
+    max_height = evt['queryStringParameters'].get('maxheight', None)
+    max_width = evt['queryStringParameters'].get('maxwidth', None)
+
+    if formatting == 'xml':
         return {
             'statusCode': 501,
-            'body': 'Ehm... No'
+            'body': 'XML is not supported'
         }
-    return  {
+    return {
         'statusCode': 200,
         'headers': {
             "Content-Type": "application/json",
@@ -59,12 +73,13 @@ def render_oembed(evt, context):
             "version": "1.0",
             "url": evt['queryStringParameters']['url'],
             "type": "rich",
-            "html": render_markdown(markdownInput),
+            "html": render_markdown(markdownInput, max_height, max_width),
             "width": "500",
             "height": "700"
 
         })
     }
+
 
 def render_editor(evt, context):
     with open('index.html') as indexFile:
