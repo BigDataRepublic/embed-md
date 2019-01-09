@@ -16,7 +16,7 @@
       // execute callback when the page is ready:
 Zepto(function($){
     function updateUrl(){
-        var url = "https://md.bigdatarepublic.nl/" + btoa(pako.deflate($('#markdownInput').val(), { to: 'string', level: 8 })).replace("/", "_").replace("+", "-");
+        var url = "https://md.bigdatarepublic.nl/" + btoa(pako.deflate($('#markdownInput').val(), { to: 'string', level: 8 })).replace(/\//g, "_").replace(/\+/g, "-");
         $('#textUrl').val(url);
         $('#visitUrl').attr('href', url);
     }
