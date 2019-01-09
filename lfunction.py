@@ -4,6 +4,7 @@ import markdown.extensions.extra
 from urllib.parse import unquote
 
 import json
+import zlib
 
 
 def lambda_handler(evt, context):
@@ -29,7 +30,7 @@ def render_markdown(inputValue, max_height, max_width):
     if max_width is not None and max_width < width:
         width = max_width
 
-    markdownSource = base64.urlsafe_b64decode(inputValue).decode("utf-8")
+    markdownSource = zlib.decompress(base64.urlsafe_b64decode(inputValue), wbits=15).decode('utf-8')
     markdownHtml = markdown.markdown(markdownSource, extensions=['extra'])
     markdownHtml = markdownHtml.replace("<table>", '<table class="pure-table" height=' + str(height) + ' width=' + str(width) + '>')
     return '''<!doctype html>

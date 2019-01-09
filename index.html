@@ -11,11 +11,12 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/pure-min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/grids-responsive-min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/zepto/1.2.0/zepto.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/1.0.7/pako_deflate.min.js"></script>
   <script>
       // execute callback when the page is ready:
 Zepto(function($){
     function updateUrl(){
-        var url = "https://md.bigdatarepublic.nl/" + btoa($('#markdownInput').val()).replace("/", "_").replace("+", "-");
+        var url = "https://md.bigdatarepublic.nl/" + btoa(pako.deflate($('#markdownInput').val(), { to: 'string', level: 8 })).replace("/", "_").replace("+", "-");
         $('#textUrl').val(url);
         $('#visitUrl').attr('href', url);
     }
