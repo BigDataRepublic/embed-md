@@ -1,0 +1,29 @@
+<!doctype html>
+    <html lang="en" style="width: {{width}}px;">
+        <head>
+            <meta charset="utf-8">
+            <meta name="robots" content="noindex" />
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/pure-min.css">
+            <link rel="alternate" type="application/json+oembed" href="https://md.bigdatarepublic.nl/oembed?url=https%3A%2F%2Fmd.bigdatarepublic.nl%2F{{inputValue}}&format=json" title="oEmbed" />
+            <script type="javascript">
+                var windowId = undefined;
+
+                window.addEventListener('message', function(e) {
+                    if (e.data.method == "register") {
+                        windowId = e.data.windowId;
+                    }
+                });
+
+                window.addEventListener('load', function(e) {
+                    var body = document.body,
+                    html = document.documentElement;
+
+                    var height = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
+                    window.parent.postMessage({method: "resize", windowId: windowId, height: height }, '*');
+                });
+            </script>
+        </head>
+        <body>
+            {{ markdownHtml }}
+        </body>
+</html>

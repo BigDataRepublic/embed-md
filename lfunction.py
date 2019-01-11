@@ -5,6 +5,17 @@ from urllib.parse import unquote
 
 import json
 import zlib
+from jinja2 import Environment
+
+
+env = Environment(
+    loader=PackageLoader('embed-md', 'templates'),
+    autoescape=select_autoescape(['html', 'xml'])
+)
+
+
+DEFAULT_HEIGHT = 10000
+DEFAULT_WIDTH = 600
 
 
 def lambda_handler(evt, context):
@@ -21,43 +32,44 @@ def lambda_handler(evt, context):
     }
 
 
-def render_markdown(inputValue, max_height, max_width):
-    height = 600
-    width = 600
-
-    if max_height is not None and max_height < height:
-        height = max_height
-    if max_width is not None and max_width < width:
-        width = max_width
-
+def render_markdown(inputValue, height, width):
     markdownSource = zlib.decompress(base64.urlsafe_b64decode(inputValue), wbits=15).decode('utf-8')
     markdownHtml = markdown.markdown(markdownSource, extensions=['extra'])
-    markdownHtml = markdownHtml.replace("<table>", '<table class="pure-table" height=' + str(height) + ' width=' + str(width) + '>')
-    return '''<!doctype html>
-
-        <html lang="en">
-        <head>
-          <meta charset="utf-8">
-          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/pure-min.css">
-          <link rel="alternate" type="application/json+oembed" href="https://md.bigdatarepublic.nl/oembed?url=https%3A%2F%2Fmd.bigdatarepublic.nl%2F''' + inputValue + '''&format=json" title="oEmbed" />
-        </head><body>''' + markdownHtml + '''</body></html>'''
+    markdownHtml = markdownHtml.replace("<table>", '<table class="pure-table">')
+    return env.get_template('markdown_render.html').render(width=width, markdownHtml=markdownHtml, inputValue=inputValue)
 
 
 def render_html(evt, context):
     return {
         'statusCode': 200,
         'headers': {
-            "Content-Type": "text/html"
+            "Content-Type": "text/html",
+            "X-Robots-Tag": "noindex"
         },
-        'body': render_markdown(evt['pathParameters']['markdown'], None, None)
+        'body': render_markdown(evt['pathParameters']['markdown'], DEFAULT_HEIGHT, DEFAULT_WIDTH)
     }
 
 
 def render_oembed(evt, context):
     markdownInput = unquote(evt['queryStringParameters']['url']).split("/")[-1]
     formatting = evt['queryStringParameters'].get('format', '')
-    max_height = evt['queryStringParameters'].get('maxheight', None)
-    max_width = evt['queryStringParameters'].get('maxwidth', None)
+
+    max_height = None
+    max_width = None
+
+    try:
+        max_height = int(evt['queryStringParameters'].get('maxheight', None))
+        max_width = int(evt['queryStringParameters'].get('maxwidth', None))
+    except:
+        pass
+
+    height = DEFAULT_HEIGHT
+    width = DEFAULT_WIDTH
+
+    if max_height is not None and max_height < height:
+        height = max_height
+    if max_width is not None and max_width < width:
+        width = max_width
 
     if formatting == 'xml':
         return {
@@ -68,15 +80,16 @@ def render_oembed(evt, context):
         'statusCode': 200,
         'headers': {
             "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*"
+            "Access-Control-Allow-Origin": "*",
+            "X-Robots-Tag": "noindex"
         },
         'body': json.dumps({
             "version": "1.0",
             "url": evt['queryStringParameters']['url'],
             "type": "rich",
-            "html": render_markdown(markdownInput, max_height, max_width),
-            "width": "500",
-            "height": "700"
+            "html": render_markdown(markdownInput, height, width),
+            "width": width,
+            "height": height
 
         })
     }
@@ -88,6 +101,17 @@ def render_editor(evt, context):
             'statusCode': 200,
             'headers': {
                 "Content-Type": "text/html"
+            },
+            'body': indexFile.read()
+        }
+
+
+def render_robots_txt(evt, context):
+    with open('robots.txt') as indexFile:
+        return {
+            'statusCode': 200,
+            'headers': {
+                "Content-Type": "text/plain"
             },
             'body': indexFile.read()
         }
