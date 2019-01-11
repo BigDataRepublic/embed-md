@@ -22,13 +22,14 @@ def lambda_handler(evt, context):
     path = evt['path']
     if path.startswith("/oembed"):
         return render_oembed(evt, context)
+    elif path.startswith("/m/"):
+        return render_html(evt, context)
     elif path == '/':
         return render_editor(evt, context)
-    else:
-        return render_html(evt, context)
+
     return {
-        'statusCode': 400,
-        'body': 'fuuuuuuuuuuuuu'
+        'statusCode': 404,
+        'body': '<html><body style="text-align:center; font-size: 500; font-family: cursive">404<br />not found</body></html>'
     }
 
 

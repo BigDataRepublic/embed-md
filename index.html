@@ -16,12 +16,13 @@
       // execute callback when the page is ready:
 Zepto(function($){
     function updateUrl(){
-        var url = "https://md.bigdatarepublic.nl/" + btoa(pako.deflate($('#markdownInput').val(), { to: 'string', level: 8 })).replace(/\//g, "_").replace(/\+/g, "-");
+        var url = "https://md.bigdatarepublic.nl/m/" + btoa(pako.deflate($('#markdownInput').val(), { to: 'string', level: 8 })).replace(/\//g, "_").replace(/\+/g, "-");
         $('#textUrl').val(url);
         $('#visitUrl').attr('href', url);
     }
-  $('#markdownInput').on('keyup', updateUrl);
-  $('#markdownInput').on('change', updateUrl);
+    $('#markdownInput').on('keyup', updateUrl);
+    $('#markdownInput').on('change', updateUrl);
+    updateUrl();
 })
   </script>
   <style>
@@ -45,6 +46,8 @@ Zepto(function($){
       }
       textarea, input {
           width: 100%;
+          font-family: monospace;
+          white-space: pre;
       }
       /* LAYOUT CSS */
       .pure-img-responsive {
@@ -129,10 +132,10 @@ Zepto(function($){
     <div class="content pure-u-1 pure-u-md-3-4">
         <div>
             <div>
-                <h1>1. Get a markdown editor</h1>
+                <h1>1 &rarr; Get a markdown editor</h1>
                 <p>For example, try <a href="https://atom.io/">Atom</a></p>
-                <h1>2. Put the markdown below</h1>
-                <textarea id="markdownInput" name="markdown" rows="8" cols="80">
+                <h1>2 &rarr; Put the markdown below</h1>
+                <textarea id="markdownInput" name="markdown" rows="20" cols="80">
 # Yeah markdown
 
 Now you can do tables
@@ -144,8 +147,8 @@ Content Cell  | Content Cell
                 </textarea>
             </div>
             <div>
-                <h1>3. Copy url below to embed in your medium post</h1>
-                <input type="text" id="textUrl" style="font-family: monospace;">
+                <h1>3 &rarr; Copy url below to embed in your medium post</h1>
+                <input type="text" id="textUrl">
                 <p>You can preview it by visiting <a href="/" id="visitUrl">the url above</a></p>
             </div>
         </div>
