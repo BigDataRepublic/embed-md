@@ -1,7 +1,7 @@
 
 package:
 	mkdir -p package
-	pip install --target package markdown
+	pip install --target package markdown jinja2
 
 build: package
 	cp lfunction.py package
