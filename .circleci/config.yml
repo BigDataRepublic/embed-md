@@ -5,4 +5,11 @@ jobs:
       - image: circleci/python:3.7
     steps:
       - checkout
-      - run: echo "A first hello"
+      - run:
+          name: Build
+          command: |
+            make build && cp function.zip /tmp/function.zip
+
+      - store_artifacts:
+          path: /tmp/function.zip
+          destination: function.zip
