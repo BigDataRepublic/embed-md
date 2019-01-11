@@ -5,10 +5,10 @@ from urllib.parse import unquote
 
 import json
 import zlib
-from jinja2 import Environment, PackageLoader, select_autoescape
+from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 env = Environment(
-    loader=PackageLoader('templates'),
+    loader=FileSystemLoader(searchpath="./templates"),
     autoescape=select_autoescape(['html', 'xml'])
 )
 
