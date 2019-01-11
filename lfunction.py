@@ -46,7 +46,7 @@ def render_html(evt, context):
             "Content-Type": "text/html",
             "X-Robots-Tag": "noindex"
         },
-        'body': render_markdown(evt['pathParameters']['markdown'][len("/m/"):], DEFAULT_HEIGHT, DEFAULT_WIDTH)
+        'body': render_markdown(evt['pathParameters']['markdown'][len("m/"):], DEFAULT_HEIGHT, DEFAULT_WIDTH)
     }
 
 
