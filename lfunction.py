@@ -25,6 +25,8 @@ def lambda_handler(evt, context):
         return render_html(evt, context)
     elif path.startswith("/robots.txt"):
         return render_robots_txt(evt, context)
+    elif path.startswith("/favicon.ico"):
+        return render_favicon(evt, context)
     elif path == '/':
         return render_editor(evt, context)
 
@@ -118,6 +120,17 @@ def render_robots_txt(evt, context):
             'statusCode': 200,
             'headers': {
                 "Content-Type": "text/plain"
+            },
+            'body': indexFile.read()
+        }
+
+
+def render_favicon(evt, context):
+    with open('favicon.ico') as indexFile:
+        return {
+            'statusCode': 200,
+            'headers': {
+                "Content-Type": "image/x-icon"
             },
             'body': indexFile.read()
         }
