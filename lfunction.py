@@ -23,6 +23,8 @@ def lambda_handler(evt, context):
         return render_oembed(evt, context)
     elif path.startswith("/m/"):
         return render_html(evt, context)
+    elif path.startswith("/robots.txt"):
+        return render_robots_txt(evt, context)
     elif path == '/':
         return render_editor(evt, context)
 
