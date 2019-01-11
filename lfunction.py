@@ -5,11 +5,10 @@ from urllib.parse import unquote
 
 import json
 import zlib
-from jinja2 import Environment
-
+from jinja2 import Environment, PackageLoader, select_autoescape
 
 env = Environment(
-    loader=PackageLoader('embed-md', 'templates'),
+    loader=PackageLoader('templates'),
     autoescape=select_autoescape(['html', 'xml'])
 )
 
