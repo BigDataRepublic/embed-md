@@ -126,11 +126,12 @@ def render_robots_txt(evt, context):
 
 
 def render_favicon(evt, context):
-    with open('favicon.ico') as indexFile:
+    with open('favicon.ico', 'rb') as indexFile:
         return {
             'statusCode': 200,
             'headers': {
                 "Content-Type": "image/x-icon"
             },
-            'body': indexFile.read()
+            'body': base64.b64encode(indexFile.read()).decode('utf-8'),
+            'isBase64Encoded': True
         }
