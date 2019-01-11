@@ -5,6 +5,6 @@ package:
 
 build: package
 	cp lfunction.py package
-	cp index.html robots.txt package
+	cp index.html robots.txt favicon.ico package
 	cp -r templates package
 	cd package && zip -r ../function.zip .

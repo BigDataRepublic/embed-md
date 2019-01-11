@@ -12,4 +12,4 @@ jobs:
 
       - store_artifacts:
           path: /tmp/function.zip
-          destination: function
+          destination: function.zip
