@@ -13,8 +13,8 @@ env = Environment(
 )
 
 
-DEFAULT_HEIGHT = 10000
-DEFAULT_WIDTH = 600
+DEFAULT_HEIGHT = 500
+DEFAULT_WIDTH = 770
 
 
 def lambda_handler(evt, context):
