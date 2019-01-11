@@ -30,6 +30,10 @@ def lambda_handler(evt, context):
 
     return {
         'statusCode': 404,
+        'headers': {
+            "Content-Type": "text/html",
+            "X-Robots-Tag": "noindex"
+        },
         'body': '<html><body style="text-align:center; font-size: 500; font-family: cursive">404<br />not found</body></html>'
     }
 
