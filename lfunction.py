@@ -132,6 +132,6 @@ def render_favicon(evt, context):
             'headers': {
                 "Content-Type": "image/x-icon"
             },
-            'body': base64.b64encode(indexFile.read()),
+            'body': base64.b64encode(indexFile.read()).decode("utf-8"),
             'isBase64Encoded': True
         }
