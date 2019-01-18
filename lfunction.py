@@ -99,8 +99,9 @@ def render_oembed(evt, context):
             "type": "rich",
             "html": render_iframe(markdownInput, height, width),
             "width": width,
-            "height": height
-
+            "height": height,
+            "provider_url": "https://md.bigdatarepublic.nl",
+            "provider_name": "Embed MD"
         })
     }
 
