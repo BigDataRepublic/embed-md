@@ -56,6 +56,10 @@ def render_html(evt, context):
     }
 
 
+def render_iframe(url, height, width):
+    return '<iframe src="//md.bigdatarepublic.nl/m/{}" height="{}" width="{}" frameborder="0"></iframe>'.format(url, height, width)
+
+
 def render_oembed(evt, context):
     markdownInput = unquote(evt['queryStringParameters']['url']).split("/")[-1]
     formatting = evt['queryStringParameters'].get('format', '')
@@ -93,7 +97,7 @@ def render_oembed(evt, context):
             "version": "1.0",
             "url": evt['queryStringParameters']['url'],
             "type": "rich",
-            "html": render_markdown(markdownInput, height, width),
+            "html": render_iframe(markdownInput, height, width),
             "width": width,
             "height": height
 
